@@ -1,0 +1,3 @@
+rootProject.name = 'Giving'
+
+include ':app'
