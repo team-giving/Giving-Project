@@ -5,56 +5,18 @@
  * @format
  * @flow
  */
+import React, { Component } from 'react'
+import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer } from 'react-navigation';
 
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, StatusBar } from 'react-native';
-import SplashScreen from 'react-native-splash-screen'
+import AppSwitchNavigator from './src/navigation/AppSwitchNavigator';
 
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-    android:
-        'Double tap R on your keyboard to reload,\n' +
-        'Shake or press menu button for dev menu',
-});
+const AppContainer = createAppContainer(AppSwitchNavigator);
 
-type Props = {};
-export default class App extends Component<Props> {
-    componentDidMount() {
-        setTimeout(() => {
-            SplashScreen.hide();
-        }, 1000);
-    }
-
+export default class App extends Component<*> {
     render() {
         return (
-            <View style={styles.container}>
-                <StatusBar
-                    barStyle="light-content"
-                    backgroundColor="#76AEDB"
-                />
-                <Text style={styles.welcome}>Giving</Text>
-                <Text style={styles.instructions}>To get started, edit App.js</Text>
-                <Text style={styles.instructions}>{instructions}</Text>
-            </View>
+            <AppContainer />
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#63B0DF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});
