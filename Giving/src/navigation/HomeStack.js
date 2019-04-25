@@ -22,7 +22,12 @@ export default HomeStack = createStackNavigator({
         }
     },
     Detail: {
-        screen: DetailScreen
+        screen: DetailScreen, 
+        navigationOptions:({navigation})=> {
+            return {
+                headerTitle: "Charity Details"
+            };
+        }
     }
 },
 {

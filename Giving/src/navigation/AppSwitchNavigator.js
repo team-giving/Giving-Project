@@ -1,13 +1,17 @@
 import { createSwitchNavigator } from 'react-navigation';
 
-import WelcomeScreen from '../screens/Welcome';
+import AuthLoadingScreen from '../screens/AuthLoading';
+import AuthStackNavigator from './AuthStackNavigator';
 import AppDrawerNavigator from './AppDrawerNavigator';
 
 export default AppSwitchNavigator = createSwitchNavigator({
-    Welcome: {
-        screen: WelcomeScreen
+    AuthLoading: {
+        screen: AuthLoadingScreen
     },
-    Dashboard: {
+    Auth: {
+        screen: AuthStackNavigator
+    },
+    App: {
         screen: AppDrawerNavigator
     }
 });
