@@ -1,15 +1,27 @@
 import React, { Component } from "react";
-import { 
-    View,
-    Text,
-    StyleSheet
-} from "react-native";
+import { View, StyleSheet, Button } from "react-native";
+import InputField from '../components/InputField';
 
 class SignUp extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    onPressLearnMore = () => {
+        // alert(InputField.state.text)
+        alert("mustafa is working on this");
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <Text>SignUp</Text>
+                <InputField />
+                <Button
+                    onPress={this.onPressLearnMore}
+                    title="Submit"
+                    color="#841584"
+                    accessibilityLabel="Learn more about this purple button"
+                />
             </View>
         );
     }
