@@ -21,8 +21,9 @@ app.get("/test", (req, res) => {
   console.log("-TEST REQUEST RECEIEVED".bold.blue);
 
   const pageSize = 10;
+  const key = 7bb960e0700738ed6943b6861092b51c;
   const url =
-    "https://api.data.charitynavigator.org/v2/Organizations?app_id=af34f9bb&app_key=7bb960e0700738ed6943b6861092b51c&pageSize=" + pageSize + "&state=RI";
+    "https://api.data.charitynavigator.org/v2/Organizations?app_id=af34f9bb&app_key=" + key + "&pageSize=" + pageSize + "&state=RI";
 
   request(url, { json: true }, (err, response, data) => {
     if (err) {
