@@ -1,3 +1,8 @@
+export const Fonts = {
+    Metropolis: 'Metropolis-Medium',
+    MetropolisBold: 'Metropolis-Bold'
+}
+
 export const QUICK_SEARCH_OPTIONS = [
     "Dogs",
     "Cats",

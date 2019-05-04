@@ -3,20 +3,27 @@ import { createStackNavigator } from 'react-navigation';
 
 import WelcomeScreen from '../screens/Welcome';
 import EmailAuthScreen from '../screens/EmailAuth';
-import SignInScreen from '../screens/SignIn';
 import SignUpScreen from '../screens/SignUp';
+
+
 
 export default AuthStackNavigator = createStackNavigator({
     Welcome: {
-        screen: WelcomeScreen
+        screen: WelcomeScreen,
+
     },
-    EmailAuth : {
+    EmailAuth: {
         screen: EmailAuthScreen
-    },
-    SignIn: {
-        screen: SignInScreen
     },
     SignUp: {
         screen: SignUpScreen
     }
-});
+},
+    {
+        defaultNavigationOptions: {
+            headerBackTitle: null,
+            elevation: 0,
+            headerStyle: { backgroundColor: '#fff', elevation: 0, borderBottomWidth: 0 },
+            headerTintColor: '#2d2d2d',
+        }
+    });

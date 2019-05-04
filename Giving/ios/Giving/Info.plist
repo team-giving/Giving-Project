@@ -70,6 +70,12 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Metropolis-Bold.ttf</string>
+		<string>Metropolis-BoldItalic.ttf</string>
+		<string>Metropolis-Medium.ttf</string>
+		<string>Metropolis-MediumItalic.ttf</string>
+		<string>Metropolis-Regular.ttf</string>
+		<string>Metropolis-RegularItalic.ttf</string>
 	</array>
 </dict>
 </plist>
