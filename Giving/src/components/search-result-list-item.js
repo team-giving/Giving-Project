@@ -4,7 +4,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableHighlight
+  TouchableOpacity
 } from "react-native";
 import { FavoriteButton } from "./favorite-button.js";
 
@@ -12,18 +12,14 @@ export class SearchResultListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onPress = this.onPress.bind(this);
   }
 
-  onPress() {
-    //Alert.alert(this.props.name);
-  }
   render() {
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={this.onPress}>
+        <TouchableOpacity onPress={this.props.onPress}>
           <Text style={styles.textStyle}>{this.props.name}</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
         <FavoriteButton />
       </View>
     );

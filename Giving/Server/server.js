@@ -8,6 +8,7 @@ const colors = require("colors");
 const request = require("request");
 
 
+const {charityNavApiId, charityNavApiKey} = require('./config');
 
 const private = require('./routes/private')
 const userRoutes = require('./routes/user-routes');
@@ -22,11 +23,11 @@ const userRoutes = require('./routes/user-routes');
 
 
 //*************************** API Calls ************************************
-const apiKey = "7bb960e0700738ed6943b6861092b51c";
-const apiId = "af34f9bb";
+// const apiKey = "7bb960e0700738ed6943b6861092b51c";
+// const apiId = "af34f9bb";
 const apiUrl =
   "https://api.data.charitynavigator.org/v2/Organizations" +
-  "?app_id=" + apiId + "&app_key=" + apiKey;
+  "?app_id=" + charityNavApiId + "&app_key=" + charityNavApiKey;
 
 /*
  *  BASIC KEYWORD SEARCH

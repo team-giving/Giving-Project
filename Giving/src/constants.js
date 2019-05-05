@@ -9,7 +9,7 @@ export const QUICK_SEARCH_OPTIONS = [
     "Disaster Relief"
 ]
 
-export const CATEGORIES = [
+export const CATEGORIES_PICKER = [
     {label: 'Animals', value: '1'},
     {label: 'Arts, Culture, Humanities', value: '2'},
     {label: 'Education', value: '3'},
@@ -23,7 +23,7 @@ export const CATEGORIES = [
     {label: 'Research and Public Policy', value: '11'}
 ]
 
-export const SCOPE_OPTIONS = [
+export const SCOPE_PICKER = [
     {label: 'Regional', value: 'REGIONAL'},
     {label: 'National', value: 'NATIONAL'},
     {label: 'International', value: 'INTERNATIONAL'},

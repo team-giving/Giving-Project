@@ -67,7 +67,8 @@ export default class Search extends Component {
       searching: true,
       showFilterMenu: false
     });
-    fetch("http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/search/" + input, {
+    //fetch("http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/search/" + input, {
+    fetch("http://localhost:3000/search/" + input, {
       method: "GET"
     })
       .then(res => res.json())
@@ -91,7 +92,8 @@ export default class Search extends Component {
       searching: true,
       showFilterMenu: false
     });
-    fetch("http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/filteredSearch", {
+    //fetch("http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/filteredSearch", {
+    fetch("http://localhost:3000/filteredSearch", {
       method: "POST",
       headers: {
           Accept: "application/json",
@@ -175,7 +177,9 @@ export default class Search extends Component {
             data={this.state.results}
             keyExtractor={item => item.ein}
             renderItem={({ item }) => (
-              <SearchResultListItem name={item.charityName} />
+              <SearchResultListItem name={item.charityName} onPress={() => this.props.navigation.navigate('Detail', {
+                  charityData: item
+              })}/>
             )}
           />
         </View>
@@ -199,10 +203,13 @@ export default class Search extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
   },
   filterFormBox:{
-    flex: 2.5
+    flex: 4
   },
   sectionHeader: {
     paddingTop: 2,

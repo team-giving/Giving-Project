@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, StyleSheet, Text, View, TextInput, Switch, Button} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Slider from '@react-native-community/slider';
-import { CATEGORIES, SCOPE_OPTIONS }  from '../constants.js'
+import { CATEGORIES_PICKER, SCOPE_PICKER }  from '../constants.js'
 
 export class FilterForm extends React.Component {
     constructor(props) {
@@ -39,7 +39,7 @@ export class FilterForm extends React.Component {
         <View style = {styles.innerContainer}>
             <Text>Category:</Text>
             <RNPickerSelect
-            items = {CATEGORIES}
+            items = {CATEGORIES_PICKER}
             onValueChange = {(category) => this.setState({category})}
             placeholder = {{label: 'Pick a category...', value: null, color: 'black'}}
             />
@@ -79,7 +79,7 @@ export class FilterForm extends React.Component {
         <View style = {styles.innerContainer}>
             <Text>Scope of Work:</Text>
             <RNPickerSelect
-            items = {SCOPE_OPTIONS}
+            items = {SCOPE_PICKER}
             onValueChange = {(scope) => this.setState({scope})}
             placeholder = {{label: 'Pick a scope...', value: null, color: 'black'}}
             />
@@ -107,9 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 10,
     marginBottom: 10,
-    borderBottomWidth: .5,
-    marginLeft: 10,
-    marginRight: 10
+    borderBottomWidth: .5
   },
   innerContainer:{
       flex: 1,
@@ -133,6 +131,5 @@ const styles = StyleSheet.create({
       borderWidth: .5,
       borderColor: 'grey',
       height: 15,
-      margin: 5
   },
 });

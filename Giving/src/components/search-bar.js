@@ -53,9 +53,8 @@ const styles = StyleSheet.create({
     maxHeight: 50,
     width: "100%",
     padding: 3,
-    backgroundColor: "blue",
+    backgroundColor: "dodgerblue",
     justifyContent: "center",
-    marginTop: 35
   },
   searchBox: {
     flex: 1,

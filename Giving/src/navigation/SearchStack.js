@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -11,23 +11,23 @@ export default SearchStack = createStackNavigator({
         navigationOptions:({navigation})=> {
             return {
                 headerTitle: "Search",
-                headerLeft: 
-                    <Icon 
+                headerLeft:
+                    <Icon
                         style={{paddingLeft: 10}}
                         onPress={() => navigation.openDrawer()}
-                        name="md-menu" 
-                        size={30} 
+                        name="md-menu"
+                        size={30}
                     />
             };
         }
     },
     Detail: {
-        screen: DetailScreen, 
-        navigationOptions:({navigation})=> {
-            return {
-                headerTitle: "Charity Details"
-            };
-        }
+        screen: DetailScreen,
+        // navigationOptions:({navigation})=> {
+        //     return {
+        //         headerTitle: "Charity Details"
+        //     };
+        // }
     }
 },
 {

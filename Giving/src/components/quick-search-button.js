@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 20,
     justifyContent: "center",
-    margin: 5
+    margin: 5,
+    backgroundColor: 'dodgerblue'
   },
   textStyle: {
     fontSize: 30,
