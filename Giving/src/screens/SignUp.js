@@ -96,7 +96,7 @@ class SignUp extends Component {
                     }
                 })
                 .catch((error) => {
-                    Alert.alert(error);
+                    Alert.alert("Error",  "That email and or username has been used to sign up before.");
                 });
         } else {
             if (!validator.isEmail(email)) {
