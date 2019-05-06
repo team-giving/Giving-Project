@@ -4,13 +4,39 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeStack from './HomeStack';
 import SearchStack from './SearchStack';
+import MapStack from './MapStack'
 import ProfileStack from './ProfileStack'
 
 export default AppBottomTabNavigator = createBottomTabNavigator(
     {
-        Home: HomeStack,
-        Search: SearchStack,
-        Profile: ProfileStack
+        Home: {
+            screen: HomeStack,
+            navigationOptions: ({ navigation }) => ({
+                title: "Home",
+                tabBarIcon: ({ tintColor, focused }) => <Icon name="md-home" size={25} color={tintColor} />
+            })
+        },
+        Search:  {
+            screen: SearchStack,
+            navigationOptions: ({ navigation }) => ({
+                title: "Search",
+                tabBarIcon: ({ tintColor, focused }) => <Icon name="md-search" size={25} color={tintColor} />
+            })
+        },
+        Map:  {
+            screen: MapStack,
+            navigationOptions: ({ navigation }) => ({
+                title: "Local Charities",
+                tabBarIcon: ({ tintColor, focused }) => <Icon name="md-pin" size={25} color={tintColor} />
+            })
+        },
+        Profile: {
+            screen: ProfileStack,
+            navigationOptions: ({ navigation }) => ({
+                title: "Profile",
+                tabBarIcon: ({ tintColor, focused }) => <Icon name="md-person" size={25} color={tintColor} />
+            })
+        },
     },
     {
         navigationOptions: ({ navigation }) => {
@@ -20,24 +46,6 @@ export default AppBottomTabNavigator = createBottomTabNavigator(
                 headerTitle: routeName
             };
         },
-        defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused, horizontal, tintColor }) => {
-                const { routeName } = navigation.state;
-                switch (routeName) {
-                    case 'Home':
-                        return <Icon name="md-home" size={25} color={tintColor} />;
-                        break;
-                    case 'Search':
-                        return <Icon name="md-search" size={25} color={tintColor} />;
-                        break;
-                    case 'Profile':
-                        return <Icon name="md-person" size={25} color={tintColor} />;
-                        break;
-                    default:
-                        break;
-                } 
-            },
-        }),
         tabBarOptions: {
             activeTintColor: '#1578d0',
             inactiveTintColor: 'gray',
