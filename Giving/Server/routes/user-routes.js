@@ -7,7 +7,7 @@ const { secret } = require('../config');
 
 router.post('/register', (req, res) => {
     const { email, username, password } = req.body;
-
+    
     let newUser = new User({
         email,
         username,

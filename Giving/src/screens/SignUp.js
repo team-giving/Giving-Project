@@ -9,7 +9,8 @@ import {
     Image,
     TextInput,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 import { Fonts } from "../constants.js";
@@ -22,7 +23,6 @@ class SignUp extends Component {
 
     constructor(props) {
         super(props);
-        this.signUp = this.signUp.bind(this);
         this.submitData = this.submitData.bind(this);
     }
 
@@ -48,15 +48,6 @@ class SignUp extends Component {
                 marginRight: 65
             }
         };
-
-    signUp = async () => {
-        try {
-            await AsyncStorage.setItem('@userToken', 'Shash');
-            this.props.navigation.navigate('App');
-        } catch (e) {
-            alert(e);
-        }
-    }
 
     state = {
         email: "",
@@ -89,8 +80,10 @@ class SignUp extends Component {
     }
 
     submitData = () => {
-        const { email, username, password } = this.state;
-        if (validator.isEmail(email) && password) {
+        const usernamePattern = /^[0-9a-zA-Z]+$/;
+        let { email, username, password } = this.state;
+        email = email.toLowerCase();
+        if (validator.isEmail(email) && username.length >= 6 && username.match(usernamePattern) && password.length >= 6) {
             axios
                 .post('http://localhost:3000/user/register', {
                     email,
@@ -103,10 +96,18 @@ class SignUp extends Component {
                     }
                 })
                 .catch((error) => {
-                    alert(error);
+                    Alert.alert(error);
                 });
         } else {
-            alert('You made afsdfsdn errosdr!');
+            if (!validator.isEmail(email)) {
+                Alert.alert('Invalid Email', 'Please enter a valid email address');
+            } else if (username.length < 6) {
+                Alert.alert('Invalid Username', 'Please enter a username with atleast 6 characters');
+            } else if (!username.match(usernamePattern)) {
+                Alert.alert('Invalid Username', 'Please enter only english alphanumeric characters');
+            } else {
+                Alert.alert('Invalid Password', 'Please enter a password with atleast 6 characters');
+            }
         }
     };
 
@@ -124,6 +125,7 @@ class SignUp extends Component {
                     onChangeText={this.handleChangeEmailField}
                     value={this.state.email}
                     onSubmitEditing={() => this.refs.txtUsername.focus()}
+                    maxLength={25}
                 />
 
 
@@ -137,6 +139,7 @@ class SignUp extends Component {
                     value={this.state.username}
                     onSubmitEditing={() => this.refs.txtPassword.focus()}
                     ref={"txtUsername"}
+                    maxLength={10}
                 />
 
                 <TextInput
@@ -149,7 +152,7 @@ class SignUp extends Component {
                     onChangeText={this.handleChangePasswordField}
                     value={this.state.password}
                     ref={"txtPassword"}
-
+                    maxLength={25}
                 />
 
                 <View style={{ height: 10 }} />
@@ -157,7 +160,6 @@ class SignUp extends Component {
                 <TouchableOpacity
                     activeOpacity={.7}
                     style={[styles.buttonContainer, { backgroundColor: '#1578d0' }]}
-                    // onPress={() => this.props.navigation.navigate('SignUp')}
                     onPress={this.submitData}
                 >
                     <Text style={styles.buttonText}>Sign Up</Text>
@@ -184,7 +186,7 @@ class SignUp extends Component {
                             color: '#2d2d2d',
                             textDecorationLine: 'underline'
                         }}
-                        onPress={() => alert("Not implemented yet")}
+                        onPress={() => Alert.alert("Terms of Service", "Not implemented yet")}
                     >
                         Terms of Service
                     </Text>
@@ -194,7 +196,7 @@ class SignUp extends Component {
                             color: '#2d2d2d',
                             textDecorationLine: 'underline'
                         }}
-                        onPress={() => alert("Not implemented yet")}
+                        onPress={() => Alert.alert("Privacy Policy", "Not implemented yet")}
                     >
                         Privacy Policy
                     </Text>
@@ -204,6 +206,7 @@ class SignUp extends Component {
     }
 }
 export default SignUp;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

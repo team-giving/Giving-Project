@@ -9,7 +9,8 @@ import {
     Image,
     TextInput,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 import { Fonts } from "../constants.js";
@@ -50,14 +51,9 @@ class EmailAuth extends Component {
         };
 
     signIn = async () => {
-        // try {
-        //     await AsyncStorage.setItem('@userToken', 'Shash');
-        //     this.props.navigation.navigate('App');
-        // } catch (e) {
-        //     alert(e);
-        // }
-        const { email, password } = this.state;
-        if (validator.isEmail(email) && password) {
+        let { email, password } = this.state;
+        email = email.toLowerCase();
+        if (validator.isEmail(email) && password.length >= 1) {
             axios
                 .post('http://localhost:3000/user/login', {
                     email,
@@ -74,19 +70,23 @@ class EmailAuth extends Component {
                                         this.props.navigation.navigate('App');
                                     })
                                     .catch(() => {
-                                        alert('error');
+                                        Alert.alert("Error", "Error storing user credentials");
                                     });
                             }
-                        } catch (err) {
-                            alert('error');
+                        } catch (errror) {
+                            Alert.alert("Error", "Authentication Error");
                         }
                     }
                 })
                 .catch((error) => {
-                    alert(error);
+                    alert("Email or Password is incorrect");
                 });
         } else {
-            alert('You made afsdfsdn errosdr!');
+            if (!validator.isEmail(email)) {
+                Alert.alert('Invalid Email', 'Please enter a valid email address');
+            } else {
+                Alert.alert('Invalid Password', 'Please enter a password');
+            }
         }
     }
 
@@ -125,6 +125,7 @@ class EmailAuth extends Component {
                     onChangeText={this.handleChangeEmailField}
                     value={this.state.email}
                     onSubmitEditing={() => this.refs.txtPassword.focus()}
+                    maxLength={25}
                 />
                 <TextInput
                     placeholder="Password"
@@ -136,7 +137,7 @@ class EmailAuth extends Component {
                     onChangeText={this.handleChangePasswordField}
                     value={this.state.password}
                     ref={"txtPassword"}
-
+                    maxLength={25}
                 />
 
                 <Text
