@@ -13,8 +13,11 @@ import {
 } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 import { Fonts } from "../constants.js";
+import validator from 'validator';
+
 
 const window = Dimensions.get('window');
+const axios = require('axios');
 
 class EmailAuth extends Component {
 
@@ -47,11 +50,43 @@ class EmailAuth extends Component {
         };
 
     signIn = async () => {
-        try {
-            await AsyncStorage.setItem('@userToken', 'Shash');
-            this.props.navigation.navigate('App');
-        } catch (e) {
-            alert(e);
+        // try {
+        //     await AsyncStorage.setItem('@userToken', 'Shash');
+        //     this.props.navigation.navigate('App');
+        // } catch (e) {
+        //     alert(e);
+        // }
+        const { email, password } = this.state;
+        if (validator.isEmail(email) && password) {
+            axios
+                .post('http://localhost:3000/user/login', {
+                    email,
+                    username: 'giving_user',
+                    password,
+                })
+                .then(response => {
+                    if (response.status == 201) {
+                        try {
+                            const token = response.headers['x-auth'];
+                            if (token) {
+                                AsyncStorage.multiSet([['@userToken', token], ['@userEmail', email]])
+                                    .then(() => {
+                                        this.props.navigation.navigate('App');
+                                    })
+                                    .catch(() => {
+                                        alert('error');
+                                    });
+                            }
+                        } catch (err) {
+                            alert('error');
+                        }
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        } else {
+            alert('You made afsdfsdn errosdr!');
         }
     }
 

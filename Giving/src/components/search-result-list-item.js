@@ -7,20 +7,21 @@ import {
   TouchableOpacity
 } from "react-native";
 import { FavoriteButton } from "./favorite-button.js";
+import { RatingImage } from "./rating-image.js"
 
 export class SearchResultListItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   render() {
+    const charityData = this.props.charityData;
+    if (charityData === undefined){
+        return null;
+    }
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.props.onPress}>
-          <Text style={styles.textStyle}>{this.props.name}</Text>
+          <Text style={styles.textStyle}>{charityData.charityName}</Text>
         </TouchableOpacity>
-        <FavoriteButton />
+        <RatingImage currentRating={charityData.currentRating}/>
+        <FavoriteButton ein={charityData.ein} favoritesList={[]}/>
       </View>
     );
   }

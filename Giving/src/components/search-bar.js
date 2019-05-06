@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, TextInput } from "react-native";
+import { PREV_SEARCHES_MAX_LENGTH } from "../constants.js"
 
 export class SearchBar extends React.Component {
   constructor(props) {
@@ -12,8 +13,7 @@ export class SearchBar extends React.Component {
   appendToPrevSearches(text) {
     if (!this.state.prevSearches.includes(text)) {
       let prevSearchesCopy = this.state.prevSearches.slice(0);
-      if (prevSearchesCopy.length >= 10) {
-        //make this limit an external variable
+      if (prevSearchesCopy.length >= PREV_SEARCHES_MAX_LENGTH) {
         prevSearchesCopy.pop();
       }
       prevSearchesCopy.push(text);
@@ -39,6 +39,7 @@ export class SearchBar extends React.Component {
             onSubmitEditing={event =>
               this.makeNewSearch(event.nativeEvent.text)
             }
+            onChangeText={(text) => this.props.updateKeyword(text)}
             defaultValue={this.props.currentSearch}
           />
         </View>

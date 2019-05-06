@@ -26,6 +26,10 @@ const User = new mongoose.Schema({
         trim: true,
         unique: true,
     },
+    favoriteList: {
+        type: [Number],
+        required: false,
+    }
 });
 
 User.pre('save', function (next) {

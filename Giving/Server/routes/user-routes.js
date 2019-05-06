@@ -6,12 +6,12 @@ const jwt = require('jsonwebtoken');
 const { secret } = require('../config');
 
 router.post('/register', (req, res) => {
-    const { email, password, username } = req.body;
+    const { email, username, password } = req.body;
 
     let newUser = new User({
         email,
-        password,
         username,
+        password
     });
 
     newUser
@@ -34,8 +34,8 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    User.findOne({ username })
+    const { email, password } = req.body;
+    User.findOne({ email })
         .then(user => {
             if (!user) {
                 return res.status(400).send();
@@ -59,6 +59,32 @@ router.post('/login', (req, res) => {
         .catch(err => {
             if (err) {
                 return res.status(401).send(err);
+            }
+            return res.status(401).send();
+        });
+});
+
+router.post('/favorite', (req, res) => {
+    const userEmail = req.body.userEmail;
+    const ein = req.body.ein;
+    console.log(userEmail)
+    User.findOne({ email: userEmail })
+        .then(user => {
+            if (!user) {
+                return res.status(400).send();
+            } else {
+                //console.log(user[0].favoriteList)
+                user.favoriteList.push(ein);
+                user.save(function (err, data) {
+                    if (err) return console.error(err);
+                });
+                return res.status(300).send();
+            }
+        })
+        .catch(err => {
+            if (err) {
+                console.log(err)
+                return res.status(402).send(err);
             }
             return res.status(401).send();
         });

@@ -13,14 +13,17 @@ import {
 } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 import { Fonts } from "../constants.js";
+import validator from 'validator';
 
 const window = Dimensions.get('window');
+const axios = require('axios');
 
 class SignUp extends Component {
 
     constructor(props) {
         super(props);
         this.signUp = this.signUp.bind(this);
+        this.submitData = this.submitData.bind(this);
     }
 
     static navigationOptions = Platform.OS === 'ios' ? {
@@ -55,7 +58,6 @@ class SignUp extends Component {
         }
     }
 
-
     state = {
         email: "",
         username: "",
@@ -85,6 +87,28 @@ class SignUp extends Component {
             }
         })
     }
+
+    submitData = () => {
+        const { email, username, password } = this.state;
+        if (validator.isEmail(email) && password) {
+            axios
+                .post('http://localhost:3000/user/register', {
+                    email,
+                    username,
+                    password,
+                })
+                .then(response => {
+                    if (response.status == 201) {
+                        this.props.navigation.navigate('EmailAuth');
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        } else {
+            alert('You made afsdfsdn errosdr!');
+        }
+    };
 
     render() {
         return (
@@ -133,7 +157,8 @@ class SignUp extends Component {
                 <TouchableOpacity
                     activeOpacity={.7}
                     style={[styles.buttonContainer, { backgroundColor: '#1578d0' }]}
-                    onPress={() => this.props.navigation.navigate('SignUp')}
+                    // onPress={() => this.props.navigation.navigate('SignUp')}
+                    onPress={this.submitData}
                 >
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableOpacity>
@@ -174,13 +199,11 @@ class SignUp extends Component {
                         Privacy Policy
                     </Text>
                 </Text>
-
             </SafeAreaView>
         );
     }
 }
 export default SignUp;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

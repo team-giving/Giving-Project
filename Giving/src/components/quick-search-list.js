@@ -1,19 +1,18 @@
 import React from "react";
 import { StyleSheet, FlatList, View } from "react-native";
-import { QuickSearchButton } from "../components/quick-search-button.js";
+import { CauseButtonList } from "../components/cause-button-list.js";
 
 export class QuickSearchList extends React.Component {
  render() {
     return (
         <FlatList
-          data={this.props.quickSearches}
-          keyExtractor={item => item}
-          numColumns="2"
+          data={this.props.categories}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <QuickSearchButton
-              keyword={item}
+            <CauseButtonList
+              categoryData={item}
               onPress={this.props.onPress}
-              key={item}
+              key={item.categoryID.toString()}
             />
           )}
         />

@@ -22,12 +22,7 @@ export default SearchStack = createStackNavigator({
         }
     },
     Detail: {
-        screen: DetailScreen,
-        // navigationOptions:({navigation})=> {
-        //     return {
-        //         headerTitle: "Charity Details"
-        //     };
-        // }
+        screen: DetailScreen
     }
 },
 {

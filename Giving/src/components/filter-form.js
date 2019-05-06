@@ -2,27 +2,69 @@ import React from 'react';
 import { Alert, StyleSheet, Text, View, TextInput, Switch, Button} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Slider from '@react-native-community/slider';
-import { CATEGORIES_PICKER, SCOPE_PICKER }  from '../constants.js'
+import { CATEGORIES_PICKER, SCOPE_PICKER, STATE_PICKER }  from '../constants.js'
 
 export class FilterForm extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        keyword: null,
         category: null,
-        ein: null,
         minRating: null,
         pageSize: null,
         ratedOnly: false,
         scope: null,
-        noGovSupport: false
+        noGovSupport: false,
+        state: null,
+        city: null,
+        zip: null
       };
       this.submitSearch = this.submitSearch.bind(this);
+      this.formIsEmpty = this.formIsEmpty.bind(this);
     }
 
 
     submitSearch(){
-        this.props.filteredSearch(this.state)
+        if (!this.formIsEmpty()){
+            this.props.filteredSearch(this.state);
+        }
+        else{
+            Alert.alert("Search requires at least one parameter!");
+        }
+    }
+
+
+    formIsEmpty(){
+        if (this.props.keyword != ""){
+            return false;
+        }
+        if (this.state.category != null){
+            return false;
+        }
+        if (this.state.minRating != null && this.state.minRating != 0){
+            return false;
+        }
+        if (this.state.pageSize != null){
+            return false;
+        }
+        if (this.state.ratedOnly != false){
+            return false;
+        }
+        if (this.state.scope != null){
+            return false;
+        }
+        if (this.state.noGovSupport != false){
+            return false;
+        }
+        if (this.state.state != null){
+            return false;
+        }
+        if (this.state.city != null && this.state.city != ""){
+            return false;
+        }
+        if (this.state.zip != null && this.state.zip != ""){
+            return false;
+        }
+        return true;
     }
 
 
@@ -31,24 +73,12 @@ export class FilterForm extends React.Component {
       <View style={styles.container}>
 
         <View style = {styles.innerContainer}>
-            <Text>Keyword:</Text>
-            <TextInput style={styles.textInput}
-            onChangeText={(keyword) => this.setState({keyword})}/>
-        </View>
-
-        <View style = {styles.innerContainer}>
             <Text>Category:</Text>
             <RNPickerSelect
             items = {CATEGORIES_PICKER}
             onValueChange = {(category) => this.setState({category})}
             placeholder = {{label: 'Pick a category...', value: null, color: 'black'}}
             />
-        </View>
-
-        <View style = {styles.innerContainer}>
-            <Text>EIN (Employer Identification Number):</Text>
-            <TextInput style={styles.textInput}
-            onChangeText={(ein) => this.setState({ein})}/>
         </View>
 
         <View style = {styles.sliderContainer}>
@@ -90,6 +120,31 @@ export class FilterForm extends React.Component {
             <Switch
             value = {this.state.noGovSupport}
             onValueChange = {(noGovSupport) => this.setState({noGovSupport})}/>
+        </View>
+
+        <View style = {styles.innerContainer}>
+            <Text>State:</Text>
+            <RNPickerSelect
+            items = {STATE_PICKER}
+            onValueChange = {(state) => this.setState({state})}
+            placeholder = {{label: 'Pick a state...', value: null, color: 'black'}}
+            />
+        </View>
+
+        <View style = {styles.innerContainer}>
+            <Text>City:</Text>
+            <TextInput style={styles.textInput}
+            onChangeText={(city) => this.setState({city})}
+            clearButtonMode='always'
+            textContentType='addressCity'/>
+        </View>
+
+        <View style = {styles.innerContainer}>
+            <Text>Zip Code:</Text>
+            <TextInput style={styles.textInput}
+            onChangeText={(zip) => this.setState({zip})}
+            clearButtonMode='always'
+            textContentType='postalCode'/>
         </View>
 
         <View style = {styles.innerContainer}>

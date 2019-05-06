@@ -1,46 +1,20 @@
-// import React, { Component } from 'react';
-// import { Text, View, StyleSheet, Button } from 'react-native';
-//
-// export default class Search extends Component {
-//     render() {
-//         return (
-//             <View style={styles.container}>
-//                 <Text> Search </Text>
-//                 <Button
-//                     title="Go to Detail Screen"
-//                     onPress={() => this.props.navigation.navigate('Detail')} />
-//             </View>
-//         )
-//     }
-// }
-//
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         backgroundColor: '#F5FCFF',
-//     }
-// });
-
-//_____________________________________________________________________________
-
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-    Alert,
+  Alert,
   Button,
   StyleSheet,
   FlatList,
   Text,
   View,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from "react-native";
 
 import { FilterForm } from "../components/filter-form.js";
 import { SearchBar } from "../components/search-bar.js";
 import { QuickSearchList } from "../components/quick-search-list.js";
 import { SearchResultListItem } from "../components/search-result-list-item.js";
-import { QUICK_SEARCH_OPTIONS } from "../constants.js";
+import { CATEGORIES, SERVER_URI, NO_RESULTS_RESPONSES } from "../constants.js";
 
 export default class Search extends Component {
   constructor(props) {
@@ -48,79 +22,116 @@ export default class Search extends Component {
     this.state = {
       currentSearch: "",
       results: [],
+      showQuickButtons: true,
       searching: false,
-      noResults: false,
+      noResults: 0,
       showFilterMenu: false
     };
     this.searchCharities = this.searchCharities.bind(this);
-    this.renderResults = this.renderResults.bind(this);
+    this.filteredSearch = this.filteredSearch.bind(this);
+    this.searchByCause = this.searchByCause.bind(this);
     this.returnToSearchHome = this.returnToSearchHome.bind(this);
     this.openFilterMenu = this.openFilterMenu.bind(this);
     this.closeFilterMenu = this.closeFilterMenu.bind(this);
     this.renderFilterMenu = this.renderFilterMenu.bind(this);
-    this.filteredSearch = this.filteredSearch.bind(this);
+    this.getNoResultsMessage = this.getNoResultsMessage.bind(this);
+    this.renderResults = this.renderResults.bind(this);
   }
 
-  searchCharities(input) {
-    this.setState({
-      currentSearch: input,
-      searching: true,
-      showFilterMenu: false
-    });
-    //fetch("http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/search/" + input, {
-    fetch("http://localhost:3000/search/" + input, {
-      method: "GET"
-    })
-      .then(res => res.json())
-      .then(json => {
-        console.log("-GET RESPONSE RECEIVED");
-        if (json.data === null) {
-          this.setState({ results: json.data, noResults: true });
+  _updateKeyword = text => {
+    this.setState({ currentSearch: text });
+  };
+
+  _onPressSearchResult = charityData => {
+    this.props.navigation.navigate("Detail", { charityData: charityData });
+  };
+
+  async searchCharities(input) {
+    this.setState({ currentSearch: input });
+    if (!this.state.showFilterMenu) {
+      this.setState({ searching: true, showQuickButtons: false });
+
+      try {
+        let response = await fetch(SERVER_URI + "/search/" + input, {
+          method: "GET"
+        });
+        let json = await response.json();
+        let data = json.data;
+        console.log(data);
+        if (data === null) {
+          this.setState({ results: data, noResults: 1, searching: false});
         } else {
-          this.setState({ results: json.data, noResults: false });
+          this.setState({ results: data, noResults: 0, searching: false});
         }
-      })
-      .catch(err => {
+      } catch (err) {
         console.log(err);
-      });
+      }
+    }
   }
 
-  filteredSearch(filters) {
-      console.log(filters);
+  async filteredSearch(filters) {
+    let keyword = this.state.currentSearch;
+    filters.keyword = keyword;
+    console.log(filters);
     this.setState({
-      currentSearch: '',
       searching: true,
-      showFilterMenu: false
+      showFilterMenu: false,
+      showQuickButtons: false
     });
-    //fetch("http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/filteredSearch", {
-    fetch("http://localhost:3000/filteredSearch", {
-      method: "POST",
-      headers: {
+
+    try {
+      let response = await fetch(SERVER_URI + "/search/filtered", {
+        method: "POST",
+        headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
-      },
-      body: JSON.stringify(filters)
-    })
-      .then(res => res.json())
-      .then(json => {
-        console.log("-POST RESPONSE RECEIVED");
-        if (json.data === null) {
-          this.setState({ results: json.data, noResults: true });
-        } else {
-          this.setState({ results: json.data, noResults: false });
-        }
-      })
-      .catch(err => {
-        console.log(err);
+        },
+        body: JSON.stringify(filters)
       });
+      let json = await response.json();
+      let data = json.data;
+      console.log(data);
+      if (json.data === null) {
+        this.setState({ results: json.data, noResults: 2, searching: false });
+      } else {
+        this.setState({ results: json.data, noResults: 0, searching: false });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async searchByCause(causeID) {
+    this.setState({
+      searching: true,
+      showFilterMenu: false,
+      showQuickButtons: false
+    });
+    try {
+      let response = await fetch(
+        SERVER_URI + "/search/byCause/" + causeID.toString(),
+        { method: "GET" }
+      );
+      let json = await response.json();
+      let data = json.data;
+      console.log(data);
+      if (data === null) {
+        this.setState({ results: data, noResults: 3, searching: false });
+      } else {
+        this.setState({ results: data, noResults: 0, searching: false });
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   returnToSearchHome() {
     this.setState({
       currentSearch: "",
       results: [],
+      showQuickButtons: true,
       searching: false,
-      noResults: false
+      noResults: 0
     });
   }
 
@@ -136,7 +147,10 @@ export default class Search extends Component {
       return (
         <View style={styles.filterFormBox}>
           <Button title="close filter menu" onPress={this.closeFilterMenu} />
-          <FilterForm filteredSearch={this.filteredSearch}/>
+          <FilterForm
+            filteredSearch={this.filteredSearch}
+            keyword={this.state.currentSearch}
+          />
         </View>
       );
     } else {
@@ -148,38 +162,59 @@ export default class Search extends Component {
     }
   }
 
+  getNoResultsMessage(noResultsCode){
+      if (noResultsCode == 1){
+         return (NO_RESULTS_RESPONSES.basic + this.state.currentSearch);
+      }
+      else if (noResultsCode == 2){
+          return NO_RESULTS_RESPONSES.filtered;
+      }
+      else if (noResultsCode == 3){
+          return NO_RESULTS_RESPONSES.cause;
+      }
+  }
+
   renderResults() {
-    if (!this.state.searching) {
+    if (this.state.showQuickButtons) {
       return (
         <View style={styles.container}>
           <QuickSearchList
-            quickSearches={QUICK_SEARCH_OPTIONS}
-            onPress={this.searchCharities}
+            categories={CATEGORIES}
+            onPress={this.searchByCause}
           />
         </View>
       );
-    } else if (this.state.noResults) {
+  } else if (this.state.searching) {
+      return (
+        <View style={styles.container}>
+          <Button title="back" onPress={this.returnToSearchHome} />
+          <View style={styles.container}>
+              <ActivityIndicator size="large" color="#1578d0" />
+          </View>
+        </View>
+      );
+    }else if (this.state.noResults != 0) {
       return (
         <View style={styles.container}>
           <Button title="back" onPress={this.returnToSearchHome} />
           <Text>
-            Sorry, we couldn't find any charities matching your search for '
-            {this.state.currentSearch}'
+            {this.getNoResultsMessage(this.state.noResults)}
           </Text>
         </View>
       );
     } else {
-        console.log(this.state.results);
+      console.log(this.state.results);
       return (
         <View style={styles.container}>
           <Button title="back" onPress={this.returnToSearchHome} />
           <FlatList
             data={this.state.results}
-            keyExtractor={item => item.ein}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <SearchResultListItem name={item.charityName} onPress={() => this.props.navigation.navigate('Detail', {
-                  charityData: item
-              })}/>
+              <SearchResultListItem
+                charityData={item}
+                onPress={() => this._onPressSearchResult(item)}
+              />
             )}
           />
         </View>
@@ -193,6 +228,7 @@ export default class Search extends Component {
         <SearchBar
           onSearch={this.searchCharities}
           currentSearch={this.state.currentSearch}
+          updateKeyword={this._updateKeyword}
         />
         {this.renderFilterMenu()}
         {this.renderResults()}
@@ -203,12 +239,12 @@ export default class Search extends Component {
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#F5FCFF',
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
   },
-  filterFormBox:{
+  filterFormBox: {
     flex: 4
   },
   sectionHeader: {
