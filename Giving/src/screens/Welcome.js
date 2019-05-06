@@ -5,6 +5,9 @@ import { Fonts } from "../constants.js";
 
 const window = Dimensions.get('window');
 
+import Video from "react-native-video";
+import GivingVideo from "../assets/giving_animation.mp4";
+
 export default class Welcome extends Component {
     static navigationOptions = {
         header: null
@@ -20,7 +23,7 @@ export default class Welcome extends Component {
                 </View>
 
                 <View style={styles.taglineContainer}>
-                    <Text style={styles.tagline}>Charities made easy.</Text>
+                    <Video repeat source={GivingVideo} resizeMode="contain" style={StyleSheet.absoluteFill} />
                 </View>
 
                 <TouchableOpacity
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#FFFFFF',
     },
     logoContainer: {
         alignItems: 'center',
