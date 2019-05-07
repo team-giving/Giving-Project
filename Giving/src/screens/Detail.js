@@ -15,20 +15,26 @@ export default class Detail extends Component {
     }
     render() {
         const charityData = this.props.navigation.getParam('charityData');
+        let categoryName = "";
+        if (charityData.category != undefined) {
+            categoryName = charityData.category.categoryName;
+        } else {
+            categoryName = "no category..."
+        }
         console.log(charityData);
         return (
             <View style={styles.container}>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 30, flex: 0.8 }}> {charityData.charityName} </Text>
-                    <FavoriteButton style={{ flex: 0.2, marginTop:20 }} ein={charityData.ein} favoritesList={[]} />
+                    <FavoriteButton style={{ flex: 0.2, marginTop: 20 }} ein={charityData.ein} favoritesList={[]} />
                 </View>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.donate(charityData.websiteURL)}>
-                        <Text style={styles.buttonText}> Donate Now </Text>
+                    <Text style={styles.buttonText}> Donate Now </Text>
                 </TouchableOpacity>
                 <RatingImage currentRating={charityData.currentRating} />
                 {/* <Text style={styles.textContainer}> EIN: {charityData.ein} </Text> */}
                 {/* <Text style={styles.textContainer}> Charity Nav URL: {charityData.charityNavigatorURL} </Text> */}
-                <Text style={styles.textContainer}> {charityData.category.categoryName}</Text>
+                <Text style={styles.textContainer}> {categoryName}</Text>
                 {/* <Text style={styles.textContainer}> Website URL: {charityData.websiteURL} </Text> */}
                 <Text style={styles.textContainer}> Tagline: {charityData.tagLine}</Text>
                 <Text style={styles.textContainer}> Mission: {charityData.mission}</Text>

@@ -85,7 +85,7 @@ class SignUp extends Component {
         email = email.toLowerCase();
         if (validator.isEmail(email) && username.length >= 6 && username.match(usernamePattern) && password.length >= 6) {
             axios
-                .post('http://localhost:3000/user/register', {
+                .post('http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/user/register', {
                     email,
                     username,
                     password,

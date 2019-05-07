@@ -55,7 +55,7 @@ class EmailAuth extends Component {
         email = email.toLowerCase();
         if (validator.isEmail(email) && password.length >= 1) {
             axios
-                .post('http://localhost:3000/user/login', {
+                .post('http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/user/login', {
                     email,
                     username: 'giving_user',
                     password,
