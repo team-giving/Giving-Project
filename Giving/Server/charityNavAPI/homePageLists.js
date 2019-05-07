@@ -23,7 +23,7 @@ router.get("/lists", (req, res) => {
 });
 
 async function getAndSortCharityNavigatorLists(homePageListData) {
-  console.log("Retrieving Home Page List Data...");
+  console.log("Retrieving Home Page List Data. Wait before starting RN App...".bold.yellow);
   const apiUrl_lists = charityNavApiUrl + "/Lists";
 
   try {
@@ -39,11 +39,24 @@ async function getAndSortCharityNavigatorLists(homePageListData) {
         let resp = await fetch(apiUrl_lists + "/" + listId + apiKeyAndIdUrl);
         let list_data = await resp.json();
         homePageListData[i] = list_data;
+
+        let charitiesInList = homePageListData[i].groups[0].organizations;
+        for (let j = 0; j < charitiesInList.length; j++){
+            try{
+                let charityEIN = charitiesInList[j].organization.ein;
+                let res = await fetch(charityNavApiUrl + "/Organizations/" + charityEIN + apiKeyAndIdUrl)
+                let charityData = await res.json();
+                homePageListData[i].groups[0].organizations[j].organization = charityData;
+            }
+            catch(er){
+                console.log(er);
+            }
+        }
       } catch (err) {
         console.log(err);
       }
     }
-    console.log("Home Page List Data Retrieved and Stored!");
+    console.log("Home Page List Data Retrieved and Stored!".bold.yellow);
   } catch (error) {
     console.log(error);
   }
@@ -51,7 +64,7 @@ async function getAndSortCharityNavigatorLists(homePageListData) {
 
 function getRandomListIDs(data) {
   let randomListIDs = [];
-  while (randomListIDs.length < 10) {
+  while (randomListIDs.length < 5) {
     let list = data[Math.floor(Math.random() * data.length)];
     if (list.isCurrentlyFeatured && !randomListIDs.includes(list.listID)) {
       if (list.listType === "Top List" || list.listType === "Hot Topics") {

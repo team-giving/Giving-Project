@@ -1,43 +1,34 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Platform } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { FavoriteButton } from "../components/favorite-button.js";
-import { Fonts } from "../constants.js";
+import { RatingImage }  from "../components/rating-image.js";
 
 export default class Detail extends Component {
 
     static navigationOptions = ({ navigation }) => {
         const charityData = navigation.getParam('charityData');
-        const headerStyle = Platform.OS === 'ios' ? {
-            fontFamily: Fonts.MetropolisBold,
-            fontWeight: 'bold',
-            fontSize: 20,
-            marginTop: 5,
-        } : {
-            fontFamily: Fonts.MetropolisBold,
-            fontWeight: '200',
-            fontSize: 20,
-            marginTop: 0,
-            textAlign: 'center',
-            alignSelf: 'center',
-            flex: 1,
-            marginRight: 65
-        };
-        return {
-            title: charityData.charityName,
-            headerTitleStyle: headerStyle
-        };
+    return {
+      title: charityData.charityName,
     };
+  };
 
     render() {
         const charityData = this.props.navigation.getParam('charityData');
+        console.log(charityData);
         return (
             <View style={styles.container}>
                 <Text> Charity Name: {charityData.charityName} </Text>
                 <Text> EIN: {charityData.ein} </Text>
                 <Text> Charity Nav URL: {charityData.charityNavigatorURL} </Text>
-                <FavoriteButton ein={charityData.ein} favoritesList={[]} />
+                <Text> Category: {charityData.category.categoryName}</Text>
+                <Text> Website URL: {charityData.websiteURL} </Text>
+                <Text> Tagline: {charityData.tagLine}</Text>
+                <Text> Mission: {charityData.mission}</Text>
+                <FavoriteButton ein={charityData.ein} favoritesList={[]}/>
+                <RatingImage currentRating={charityData.currentRating}/>
+
             </View>
-        )
+        );
     }
 }
 
@@ -46,6 +37,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F5FCFF',
     }
 });
