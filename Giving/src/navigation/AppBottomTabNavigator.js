@@ -16,14 +16,14 @@ export default AppBottomTabNavigator = createBottomTabNavigator(
                 tabBarIcon: ({ tintColor, focused }) => <Icon name="md-home" size={25} color={tintColor} />
             })
         },
-        Search:  {
+        Search: {
             screen: SearchStack,
             navigationOptions: ({ navigation }) => ({
                 title: "Search",
                 tabBarIcon: ({ tintColor, focused }) => <Icon name="md-search" size={25} color={tintColor} />
             })
         },
-        Map:  {
+        Map: {
             screen: MapStack,
             navigationOptions: ({ navigation }) => ({
                 title: "Local Charities",
@@ -43,7 +43,8 @@ export default AppBottomTabNavigator = createBottomTabNavigator(
             const { routeName } = navigation.state.routes[navigation.state.index];
             return {
                 header: null,
-                headerTitle: routeName
+                headerTitle: routeName,
+                headerStyle: { backgroundColor: '#fff', elevation: 0, borderBottomWidth: 0 }
             };
         },
         tabBarOptions: {

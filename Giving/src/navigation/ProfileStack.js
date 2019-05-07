@@ -24,6 +24,8 @@ export default ProfileStack = createStackNavigator({
 },
 {
     defaultNavigationOptions: {
-        gesturesEnabled: false
+        gesturesEnabled: false,
+        headerBackTitle: null,
+        headerTintColor: '#2d2d2d'
     }
 });

@@ -149,7 +149,7 @@ class EmailAuth extends Component {
                         color: '#2d2d2d',
                         textAlign: 'right'
                     }}
-                    onPress={() => alert("Not implemented yet")}
+                    onPress={() => Alert.alert("Error", "Not implemented yet")}
                 >
                     Forgot Password?
                     </Text>

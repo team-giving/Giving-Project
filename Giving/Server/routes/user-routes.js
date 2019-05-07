@@ -67,7 +67,6 @@ router.post('/login', (req, res) => {
 router.post('/favorite', (req, res) => {
     const userEmail = req.body.userEmail;
     const ein = req.body.ein;
-    console.log(userEmail)
     User.findOne({ email: userEmail })
         .then(user => {
             if (!user) {
@@ -85,6 +84,27 @@ router.post('/favorite', (req, res) => {
             if (err) {
                 console.log(err)
                 return res.status(402).send(err);
+            }
+            return res.status(401).send();
+        });
+});
+
+router.post('/getUsername', (req, res) => {
+    const userEmail = req.body.userEmail;
+    User.findOne({ email: userEmail })
+        .then(user => {
+            if (!user) {
+                return res.status(400).send();
+            } else {
+                return res
+                    .status(201)
+                    .header('username', user.username)
+                    .send();
+            }
+        })
+        .catch(err => {
+            if (err) {
+                return res.status(401).send(err);
             }
             return res.status(401).send();
         });
