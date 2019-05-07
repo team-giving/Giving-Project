@@ -16,8 +16,11 @@ export class FavoriteButton extends React.Component {
          *      here as a prop. Also, all favorite buttons now have this.props.ein
         */
         let inFavoritedList = false;
-        if (this.props.favoritesList.includes(this.props.ein)) {
-            inFavoritedList = true;
+        let favList = this.props.favoritesList;
+        if (favList != undefined) {
+            if (this.props.favoritesList.includes(this.props.ein)) {
+                inFavoritedList = true;
+            }
         }
 
         this.state = {
@@ -27,7 +30,6 @@ export class FavoriteButton extends React.Component {
     }
 
     _favorite = async () => {
-        this.setState({ favorited: true });
         try {
             const userEmail = await AsyncStorage.getItem("@userEmail");
             const ein = this.props.ein;
@@ -38,14 +40,14 @@ export class FavoriteButton extends React.Component {
                     ein: ein
                 })
                     .then(response => {
-                        alert(response.status);
+                        this.setState({ favorited: true });
                     })
                     .catch(error => {
                         alert(error);
                     });
             } else {
                 // User Not logged in
-                alert("Create account or log in");
+                Alert.alert("Missing Feature", "Feature requires Giving account");
             }
         } catch (error) {
             alert(error);
@@ -54,7 +56,28 @@ export class FavoriteButton extends React.Component {
 
     _unfavorite = async () => {
         this.setState({ favorited: false });
-        // TODO: FILL IN CODE TO UNFAVORITE CHARITIES
+        try {
+            const userEmail = await AsyncStorage.getItem("@userEmail");
+            const ein = this.props.ein;
+            if (userEmail !== null) {
+                // User Logged in
+                axios.post(SERVER_URI + "/user/unfavorite", {
+                    userEmail: userEmail,
+                    ein: ein
+                })
+                    .then(response => {
+                        this.setState({ favorited: false });
+                    })
+                    .catch(error => {
+                        alert(error);
+                    });
+            } else {
+                // User Not logged in
+                Alert.alert("Missing Feature", "Feature requires Giving account");
+            }
+        } catch (error) {
+            alert(error);
+        }
     };
 
     renderButton() {
@@ -75,7 +98,7 @@ export class FavoriteButton extends React.Component {
 
     render() {
         return (
-            <View style={{width: 25, height: 25}}>
+            <View style={{ width: 25, height: 25 }}>
                 {this.renderButton()}
             </View>
         );

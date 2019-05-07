@@ -22,6 +22,7 @@ export class HomePageList extends React.Component {
                             charityData={item}
                             onPressCharity={this.props.onPressCharity}
                             key={charityKey++}
+                            favList={this.props.favList}
                         />
                     )}
                 />

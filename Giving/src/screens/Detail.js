@@ -14,6 +14,7 @@ export default class Detail extends Component {
 
     render() {
         const charityData = this.props.navigation.getParam('charityData');
+        const favList = this.props.navigation.getParam('favList');
         console.log(charityData);
         return (
             <View style={styles.container}>
@@ -24,7 +25,7 @@ export default class Detail extends Component {
                 <Text> Website URL: {charityData.websiteURL} </Text>
                 <Text> Tagline: {charityData.tagLine}</Text>
                 <Text> Mission: {charityData.mission}</Text>
-                <FavoriteButton ein={charityData.ein} favoritesList={[]}/>
+                <FavoriteButton ein={charityData.ein} favoritesList={favList}/>
                 <RatingImage currentRating={charityData.currentRating}/>
 
             </View>

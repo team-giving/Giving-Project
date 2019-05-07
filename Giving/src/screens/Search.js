@@ -18,6 +18,9 @@ import { SearchBar } from "../components/search-bar.js";
 import { QuickSearchList } from "../components/quick-search-list.js";
 import { SearchResultListItem } from "../components/search-result-list-item.js";
 import { Fonts, CATEGORIES, SERVER_URI, NO_RESULTS_RESPONSES } from "../constants.js";
+import AsyncStorage from "@react-native-community/async-storage";
+import axios from "axios";
+
 const window = Dimensions.get('window');
 
 export default class Search extends Component {
@@ -26,6 +29,7 @@ export default class Search extends Component {
         this.state = {
             currentSearch: "",
             results: [],
+            favoriteList: [],
             showQuickButtons: true,
             searching: false,
             noResults: 0,
@@ -40,6 +44,7 @@ export default class Search extends Component {
         this.renderFilterMenu = this.renderFilterMenu.bind(this);
         this.getNoResultsMessage = this.getNoResultsMessage.bind(this);
         this.renderResults = this.renderResults.bind(this);
+        this._getFavoriteList();
     }
 
     static navigationOptions = Platform.OS === 'ios' ? {
@@ -70,10 +75,29 @@ export default class Search extends Component {
     };
 
     _onPressSearchResult = charityData => {
-        this.props.navigation.navigate("Detail", { charityData: charityData });
+        this.props.navigation.navigate("Detail", { charityData: charityData, favList: this.state.favoriteList });
+    };
+  
+    _getFavoriteList = async () => {
+      try {
+        const userEmail = await AsyncStorage.getItem("@userEmail");
+        if (userEmail !== null) {
+          // User Logged in
+          axios.get(SERVER_URI + "/user/userFavorites/" + userEmail)
+            .then(response => {
+              this.setState({favoriteList: response.data.favoriteList});
+            })
+            .catch(error => {
+              alert(error);
+            });
+        }
+      } catch (error) {
+        alert(error);
+      }
     };
 
     async searchCharities(input) {
+        this._getFavoriteList();
         this.setState({ currentSearch: input });
         if (!this.state.showFilterMenu) {
             this.setState({ searching: true, showQuickButtons: false });
@@ -97,6 +121,7 @@ export default class Search extends Component {
     }
 
     async filteredSearch(filters) {
+        this._getFavoriteList();
         let keyword = this.state.currentSearch;
         filters.keyword = keyword;
         console.log(filters);
@@ -129,6 +154,7 @@ export default class Search extends Component {
     }
 
     async searchByCause(causeID) {
+        this._getFavoriteList();
         this.setState({
             searching: true,
             showFilterMenu: false,
@@ -211,7 +237,7 @@ export default class Search extends Component {
         }
     }
 
-    renderResults() {
+    renderResults(favList) {
         if (this.state.showQuickButtons) {
             return (
                 <View style={styles.container}>
@@ -269,6 +295,7 @@ export default class Search extends Component {
                             <SearchResultListItem
                                 charityData={item}
                                 onPress={() => this._onPressSearchResult(item)}
+                                favList={favList}
                             />
                         )}
                     />
@@ -278,6 +305,9 @@ export default class Search extends Component {
     }
 
     render() {
+        const favList = this.state.favList;
+        console.log("SEARCH PAGE LIST:");
+        console.log(favList);
         return (
             <View style={styles.container}>
                 <SearchBar
@@ -286,7 +316,7 @@ export default class Search extends Component {
                     updateKeyword={this._updateKeyword}
                 />
                 {this.renderFilterMenu()}
-                {this.renderResults()}
+                {this.renderResults(favList)}
             </View>
         );
     }

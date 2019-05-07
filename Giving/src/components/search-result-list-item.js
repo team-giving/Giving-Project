@@ -24,7 +24,7 @@ export class SearchResultListItem extends React.Component {
                 <Text style={styles.textStyle}>{charityData.charityName}</Text>
                 <View style={styles.buttonLine}>
                     <RatingImage currentRating={charityData.currentRating} />
-                    <FavoriteButton ein={charityData.ein} favoritesList={[]} />
+                    <FavoriteButton ein={charityData.ein} favoritesList={this.props.favList} />
                 </View>
             </TouchableOpacity>
         );

@@ -2,16 +2,20 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet, Button, FlatList, Platform } from "react-native";
 import { HomePageList } from "../components/home-page-list.js";
 import { Fonts, SERVER_URI } from "../constants.js";
+import AsyncStorage from "@react-native-community/async-storage";
+import axios from "axios";
 
 export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listData: []
+            listData: [],
+            favoriteList: []
         };
         this.fetchCharityLists = this.fetchCharityLists.bind(this);
         this.renderHomePageLists = this.renderHomePageLists.bind(this);
         this.fetchCharityLists();
+        this._getFavoriteList();
     }
 
     static navigationOptions = Platform.OS === 'ios' ? {
@@ -38,7 +42,25 @@ export default class Home extends Component {
         };
 
     _onPressCharity = charityData => {
-        this.props.navigation.navigate("Detail", { charityData: charityData });
+        this.props.navigation.navigate("Detail", { charityData: charityData, favList: this.state.favoriteList });
+    };
+
+    _getFavoriteList = async () => {
+        try {
+            const userEmail = await AsyncStorage.getItem("@userEmail");
+            if (userEmail !== null) {
+                // User Logged in
+                axios.get(SERVER_URI + "/user/userFavorites/" + userEmail)
+                    .then(response => {
+                        this.setState({ favoriteList: response.data.favoriteList });
+                    })
+                    .catch(error => {
+                        alert(error);
+                    });
+            }
+        } catch (error) {
+            alert(error);
+        }
     };
 
     async fetchCharityLists() {
@@ -55,7 +77,7 @@ export default class Home extends Component {
         }
     }
 
-    renderHomePageLists() {
+    renderHomePageLists(favList) {
         if (this.state.listData == []) {
             return (
                 <View style={styles.container}>
@@ -72,6 +94,7 @@ export default class Home extends Component {
                             listData={item}
                             onPressCharity={this._onPressCharity}
                             key={item.listID}
+                            favList={favList}
                         />
                     )}
                 />
@@ -80,7 +103,8 @@ export default class Home extends Component {
     }
 
     render() {
-        return <View style={styles.container}>{this.renderHomePageLists()}</View>;
+        const favList = this.state.favoriteList;
+        return <View style={styles.container}>{this.renderHomePageLists(favList)}</View>;
     }
 }
 

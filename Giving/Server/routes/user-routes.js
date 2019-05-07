@@ -65,19 +65,78 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/favorite', (req, res) => {
+    console.log("Favoriting Charity!");
     const userEmail = req.body.userEmail;
     const ein = req.body.ein;
+    console.log("User Email: "+ userEmail)
+    console.log("Ein" + ein);
     User.findOne({ email: userEmail })
         .then(user => {
             if (!user) {
                 return res.status(400).send();
             } else {
                 //console.log(user[0].favoriteList)
-                user.favoriteList.push(ein);
-                user.save(function (err, data) {
-                    if (err) return console.error(err);
-                });
-                return res.status(300).send();
+                if (!user.favoriteList.includes(ein)){
+                    user.favoriteList.push(ein);
+                    user.save(function (err, data) {
+                        if (err) return console.error(err);
+                    });
+                }
+                return res.status(200).send();
+            }
+        })
+        .catch(err => {
+            if (err) {
+                console.log(err)
+                return res.status(402).send(err);
+            }
+            return res.status(401).send();
+        });
+});
+
+router.post('/unfavorite', (req, res) => {
+    console.log("Unfavoriting Charity!");
+    const userEmail = req.body.userEmail;
+    const ein = req.body.ein;
+    console.log("User Email: "+ userEmail)
+    console.log("Ein" + ein);
+    User.findOne({ email: userEmail })
+        .then(user => {
+            if (!user) {
+                return res.status(400).send();
+            } else {
+                if (user.favoriteList.includes(ein)){
+                    for( let i = 0; i < user.favoriteList.length; i++){
+                        if ( user.favoriteList[i] === ein) {
+                            user.favoriteList.splice(i, 1);
+                            }
+                        }
+                    user.save(function (err, data) {
+                        if (err) return console.error(err);
+                    });
+                }
+                return res.status(200).send();
+            }
+        })
+        .catch(err => {
+            if (err) {
+                console.log(err)
+                return res.status(402).send(err);
+            }
+            return res.status(401).send();
+        });
+});
+
+router.get('/userFavorites/:userEmail', (req, res) =>{
+    const userEmail = req.params.userEmail;
+    console.log("Retrieving Favorited EINs for " + userEmail);
+    User.findOne({ email: userEmail })
+        .then(user => {
+            if (!user) {
+                return res.status(400).send();
+            } else {
+                let favList = user.favoriteList;
+                res.send({favoriteList: favList});
             }
         })
         .catch(err => {
