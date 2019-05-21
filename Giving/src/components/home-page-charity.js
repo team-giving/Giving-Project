@@ -22,9 +22,11 @@ export class HomePageCharity extends React.Component {
             return null;
         }
         
+        const backColor = charityData.cause.causeID ? colors[charityData.cause.causeID % colors.length] : colors[0];
+
         return (
             <TouchableOpacity
-                style={[styles.touchable, { backgroundColor: colors[Math.floor(Math.random() * colors.length)] }]}
+                style={[styles.touchable, { backgroundColor: backColor} ]}
                 onPress={this.onPressCharity}>
                 <Text style={styles.textStyle}>{charityData.charityName}</Text>
                 <View style={styles.favButton}>

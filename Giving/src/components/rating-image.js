@@ -64,12 +64,13 @@ export class RatingImage extends React.Component {
   }
 
   render() {
-    return <View style={{width: 110, height: 25}}>{this.renderImage()}</View>;
+    return <View style={{width: 100, height: 25}}>{this.renderImage()}</View>;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-      flexDirection: 'row'
+      flexDirection: 'row',
+      justifyContent: 'center'
   }
 });

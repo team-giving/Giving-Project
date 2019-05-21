@@ -90,7 +90,7 @@ export class FavoriteButton extends React.Component {
         } else {
             return (
                 <TouchableOpacity onPress={this._favorite}>
-                    <Icon name="md-heart-empty" size={25} color="#2d2d2d" />
+                    <Icon name="md-heart-empty" size={25} color="#1578d0" />
                 </TouchableOpacity>
             );
         }

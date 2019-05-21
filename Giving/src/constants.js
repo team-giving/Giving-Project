@@ -1,6 +1,7 @@
 export const Fonts = {
     Metropolis: "Metropolis-Medium",
-    MetropolisBold: "Metropolis-Bold"
+    MetropolisBold: "Metropolis-Bold",
+    MetropolisItalic: "Metropolis-MediumItalic"
 };
 
 //export const SERVER_URI = "http://localhost:3000";

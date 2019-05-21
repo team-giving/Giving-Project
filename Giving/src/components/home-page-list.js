@@ -9,12 +9,17 @@ export class HomePageList extends React.Component {
         if (listData === undefined) {
             return null;
         }
+        
+        let uniqRank = {}
+        let organizations = listData.groups[0].organizations;
+        let filtered = organizations.filter(obj => obj.rank == null || !uniqRank[obj.rank] && (uniqRank[obj.rank] = true));
+        
         let charityKey = 0;
         return (
             <View style={styles.container}>
                 <Text style={styles.categoryHeading}>{listData.listName}</Text>
                 <FlatList
-                    data={listData.groups[0].organizations}
+                    data={filtered}
                     keyExtractor={(item, index) => index.toString()}
                     horizontal={true}
                     renderItem={({ item }) => (
