@@ -21,7 +21,9 @@ export class SearchResultListItem extends React.Component {
 
         return (
             <TouchableOpacity onPress={this.props.onPress} style={styles.container}>
-                <Text style={styles.textStyle}>{charityData.charityName}</Text>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.textStyle}>{
+                    charityData.charityName}
+                </Text>
                 <View style={styles.buttonLine}>
                     <RatingImage currentRating={charityData.currentRating} />
                     <FavoriteButton ein={charityData.ein} favoritesList={this.props.favList} />
@@ -45,11 +47,13 @@ const styles = StyleSheet.create({
     textStyle: {
         fontSize: 14,
         fontFamily: Fonts.Metropolis,
-        color: "#2d2d2d"
+        color: "#2d2d2d",
+        marginLeft: 10
     },
     buttonLine: {
         flex: 1,
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        marginRight: 10
     },
 });

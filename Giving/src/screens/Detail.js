@@ -4,6 +4,7 @@ import { FavoriteButton } from "../components/favorite-button.js";
 import { RatingImage } from "../components/rating-image.js";
 import { Fonts } from "../constants.js";
 import Icon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from '@react-native-community/async-storage';
 
 const window = Dimensions.get('window');
 
@@ -68,6 +69,43 @@ export default class Detail extends Component {
             }
         } catch (error) {
             alert(error.message);
+        }
+    }
+
+    facebookShare = async () => {
+        try {
+            const facebookUser = await AsyncStorage.getItem("@facebookUser");
+            if (facebookUser !== null) {
+                const charityData = this.props.navigation.getParam('charityData');
+                let categoryName = "";
+                if (charityData.category != undefined) {
+                    categoryName = charityData.category.categoryName;
+                } else {
+                    categoryName = "No category..."
+                }
+
+                try {
+                    const result = await Share.share({
+                        message: `Facebook check out this charity: ${categoryName}. I found it on this cool new app: https://givingapp.github.io/`
+                    });
+
+                    if (result.action === Share.sharedAction) {
+                        if (result.activityType) {
+                            // shared with activity type of result.activityType
+                        } else {
+                            // shared
+                        }
+                    } else if (result.action === Share.dismissedAction) {
+                        // dismissed
+                    }
+                } catch (error) {
+                    alert(error.message);
+                }
+            } else {
+                Alert.alert("Facebook Account Required", "This feature requires signing up using a facebook account")
+            }
+        } catch (error) {
+            alert(error);
         }
     }
 
@@ -143,6 +181,9 @@ export default class Detail extends Component {
                         />
                         <TouchableOpacity onPress={this.share}>
                             <Icon name="md-share" size={25} color="#1578d0" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ marginLeft: 6 }} onPress={this.facebookShare}>
+                            <Icon name="logo-facebook" size={25} color="#1578d0" />
                         </TouchableOpacity>
                     </View>
                 </View>

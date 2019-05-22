@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, Platform } from 'react-native';
+import { Text, View, StyleSheet, Button, Platform, PermissionsAndroid } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Fonts, SERVER_URI } from "../constants.js";
+import { NavigationEvents } from 'react-navigation';
 
 export default class Map extends Component {
 
@@ -59,10 +60,30 @@ export default class Map extends Component {
 
 
     componentDidMount() {
+        if (Platform.OS === 'android') {
+            this.getLocationAsync();
+        }
         this.mapRef.fitToSuppliedMarkers(
             this.state.markers,
             false, // not animated
         );
+    }
+
+    getLocationAsync = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+                )
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    alert("Searching for your local charities");
+                } else {
+                    alert("Your location is required for this feature, Unfortunately");
+                }
+            } catch (err) {
+                console.warn(err)
+            }
+        }
     }
 
     setMarkerRef = (ref) => {
@@ -72,9 +93,13 @@ export default class Map extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <NavigationEvents
+                    onDidFocus={this.getLocationAsync}
+                />
                 <MapView
                     provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                     style={styles.map}
+                    showsUserLocation={true}
                     region={{
                         latitude: 41.8270702,
                         longitude: -71.3995896,
@@ -88,7 +113,7 @@ export default class Map extends Component {
                             coordinate={marker.coordinates}
                             title={marker.title}
                             key={idx}
-                            pinColor={idx == 0 ? "#1578d0": "red"}
+                            pinColor={idx == 0 ? "#1578d0" : "red"}
                         />
                     ))}
                 </MapView>

@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF"
     },
     filterFormBox: {
-        height: Platform.OS === 'ios' ? window.height / 3 * 2 : window.height / 3 * 2.1 
+        height: Platform.OS === 'ios' ? window.height / 3 * 1.8 : window.height / 3 * 1.81 
     },
     sectionHeader: {
         paddingTop: 2,
