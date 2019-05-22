@@ -31,10 +31,10 @@ export class HomePageCharity extends React.Component {
                 <Text style={styles.textStyle}>{charityData.charityName}</Text>
                 <View style={styles.favButton}>
                     <FavoriteButton
+                        charityName={charityData.charityName}
                         ein={charityData.ein}
                         favoritesList={favList} />
                 </View>
-
             </TouchableOpacity>
         );
     }

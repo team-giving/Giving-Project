@@ -175,8 +175,8 @@ export default class Detail extends Component {
                 <View style={styles.row}>
                     <View style={styles.buttonsContainer}>
                         <FavoriteButton
-                            ein={charityData.ein}
                             charityName={charityData.charityName}
+                            ein={charityData.ein}
                             favoritesList={this.props.navigation.getParam('favList')}
                         />
                         <TouchableOpacity onPress={this.share}>

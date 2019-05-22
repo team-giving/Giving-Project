@@ -7,7 +7,7 @@ const { secret } = require('../config');
 
 router.post('/register', (req, res) => {
     const { email, username, password } = req.body;
-    
+
     let newUser = new User({
         email,
         username,
@@ -66,18 +66,29 @@ router.post('/login', (req, res) => {
 
 router.post('/favorite', (req, res) => {
     console.log("Favoriting Charity!");
-    const userEmail = req.body.userEmail;
+    const id = req.body.mongoID;
+    const charityName = req.body.charityName;
     const ein = req.body.ein;
-    console.log("User Email: "+ userEmail)
     console.log("Ein" + ein);
-    User.findOne({ email: userEmail })
+    User.findById(id)
         .then(user => {
             if (!user) {
                 return res.status(400).send();
             } else {
-                //console.log(user[0].favoriteList)
-                if (!user.favoriteList.includes(ein)){
+                let found = false;
+                for (let i = 0; i < user.favoriteList.length; i++) {
+                    console.log("req.body.ein" + user.favoriteList[i])
+                    if (user.favoriteList[i] == req.body.ein) {
+                        found = true;
+                        //break
+                    }
+                }
+                if (!found) {
                     user.favoriteList.push(ein);
+                    user.favoriteData.push({
+                        charityName: charityName,
+                        ein: ein
+                    })
                     user.save(function (err, data) {
                         if (err) return console.error(err);
                     });
@@ -96,25 +107,22 @@ router.post('/favorite', (req, res) => {
 
 router.post('/unfavorite', (req, res) => {
     console.log("Unfavoriting Charity!");
-    const userEmail = req.body.userEmail;
+    const id = req.body.mongoID;
     const ein = req.body.ein;
-    console.log("User Email: "+ userEmail)
     console.log("Ein" + ein);
-    User.findOne({ email: userEmail })
+    User.findById(id)
         .then(user => {
             if (!user) {
                 return res.status(400).send();
             } else {
-                if (user.favoriteList.includes(ein)){
-                    for( let i = 0; i < user.favoriteList.length; i++){
-                        if ( user.favoriteList[i] === ein) {
-                            user.favoriteList.splice(i, 1);
-                            }
-                        }
-                    user.save(function (err, data) {
-                        if (err) return console.error(err);
-                    });
+                for (let i = 0; i < user.favoriteList.length; i++) {
+                    if (user.favoriteList[i] == ein) {
+                        user.favoriteList.splice(i, 1);
+                    }
                 }
+                user.save(function (err, data) {
+                    if (err) return console.error(err);
+                });
                 return res.status(200).send();
             }
         })
@@ -127,7 +135,7 @@ router.post('/unfavorite', (req, res) => {
         });
 });
 
-router.get('/userFavorites/:userEmail', (req, res) =>{
+router.get('/userFavorites/:userEmail', (req, res) => {
     const userEmail = req.params.userEmail;
     console.log("Retrieving Favorited EINs for " + userEmail);
     User.findOne({ email: userEmail })
@@ -136,7 +144,7 @@ router.get('/userFavorites/:userEmail', (req, res) =>{
                 return res.status(400).send();
             } else {
                 let favList = user.favoriteList;
-                res.send({favoriteList: favList});
+                res.send({ favoriteList: favList });
             }
         })
         .catch(err => {
@@ -149,8 +157,8 @@ router.get('/userFavorites/:userEmail', (req, res) =>{
 });
 
 router.post('/getUsername', (req, res) => {
-    const userEmail = req.body.userEmail;
-    User.findOne({ email: userEmail })
+    const id = req.body.mongoID;
+    User.findById(id)
         .then(user => {
             if (!user) {
                 return res.status(400).send();

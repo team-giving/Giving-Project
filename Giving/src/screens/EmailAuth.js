@@ -67,7 +67,22 @@ class EmailAuth extends Component {
                             if (token) {
                                 AsyncStorage.multiSet([['@userToken', token], ['@userEmail', email]])
                                     .then(() => {
-                                        this.props.navigation.navigate('App');
+                                        axios
+                                            .get('http://ec2-54-165-35-46.compute-1.amazonaws.com:3000/private/private', {
+                                                headers: {
+                                                    'x-auth': token
+                                                }
+                                            })
+                                            .then(response => {
+                                                if (response.status == 200) {
+                                                    AsyncStorage.setItem('@mongoID', response.data._id);
+                                                    this.props.navigation.navigate('App');
+                                                }
+                                            })
+                                            .catch((error) => {
+                                                Alert.alert("Error Creating Account", "Please try again later");
+                                                this.props.navigation.navigate('Auth');
+                                            });
                                     })
                                     .catch(() => {
                                         Alert.alert("Error", "Error storing user credentials");

@@ -82,6 +82,7 @@ export default class Profile extends Component {
     getData = async () => {
         try {
             const email = await AsyncStorage.getItem("@userEmail");
+            const mongoID = await AsyncStorage.getItem("@mongoID");
             if (email !== null) {
                 this.setState({
                     emailText: email,
@@ -89,7 +90,7 @@ export default class Profile extends Component {
                 })
                 // User Logged in
                 axios.post(SERVER_URI + "/user/getUsername", {
-                    userEmail: email,
+                    mongoID: mongoID,
                 })
                     .then(response => {
                         this.setState({ 
@@ -98,7 +99,7 @@ export default class Profile extends Component {
                         });
                     })
                     .catch(error => {
-                        alert(error);
+                        alert("sdfsf" + error);
                     });
             } else {
                 this.setState({

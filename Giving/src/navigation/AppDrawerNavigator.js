@@ -21,11 +21,11 @@ class CustomDrawerComponent extends Component<*> {
 
     getData = async () => {
         try {
-            const email = await AsyncStorage.getItem("@userEmail");
-            if (email !== null) {
+            const mongoID = await AsyncStorage.getItem("@mongoID");
+            if (mongoID !== null) {
                 // User Logged in
                 axios.post(SERVER_URI + "/user/getUsername", {
-                    userEmail: email,
+                    mongoID: mongoID,
                 })
                     .then(response => {
                         this.setState({ userName: response.headers.username });

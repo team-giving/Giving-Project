@@ -29,6 +29,10 @@ const User = new mongoose.Schema({
     favoriteList: {
         type: [Number],
         required: false,
+    },
+    favoriteData: {
+        type: [Object],
+        required: false,
     }
 });
 

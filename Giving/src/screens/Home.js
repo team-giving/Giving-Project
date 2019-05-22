@@ -47,6 +47,7 @@ export default class Home extends Component {
 
     _getFavoriteList = async () => {
         try {
+            const mongoID = await AsyncStorage.getItem("@mongoID");
             const userEmail = await AsyncStorage.getItem("@userEmail");
             if (userEmail !== null) {
                 // User Logged in

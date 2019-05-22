@@ -31,12 +31,14 @@ export class FavoriteButton extends React.Component {
 
     _favorite = async () => {
         try {
-            const userEmail = await AsyncStorage.getItem("@userEmail");
+            const mongoID = await AsyncStorage.getItem("@mongoID");
+            const charityName = this.props.charityName;
             const ein = this.props.ein;
-            if (userEmail !== null) {
+            if (mongoID !== null) {
                 // User Logged in
                 axios.post(SERVER_URI + "/user/favorite", {
-                    userEmail: userEmail,
+                    mongoID: mongoID,
+                    charityName: charityName,
                     ein: ein
                 })
                     .then(response => {
@@ -57,19 +59,19 @@ export class FavoriteButton extends React.Component {
     _unfavorite = async () => {
         this.setState({ favorited: false });
         try {
-            const userEmail = await AsyncStorage.getItem("@userEmail");
+            const mongoID = await AsyncStorage.getItem("@mongoID");
             const ein = this.props.ein;
-            if (userEmail !== null) {
+            if (mongoID !== null) {
                 // User Logged in
                 axios.post(SERVER_URI + "/user/unfavorite", {
-                    userEmail: userEmail,
+                    mongoID: mongoID,
                     ein: ein
                 })
                     .then(response => {
                         this.setState({ favorited: false });
                     })
                     .catch(error => {
-                        alert(error);
+                        alert("SDFDF" + error);
                     });
             } else {
                 // User Not logged in
