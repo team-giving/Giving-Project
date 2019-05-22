@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     categoryHeading: {
         fontFamily: Fonts.MetropolisBold,
         fontSize: 16,
-        marginTop: 20,
+        marginTop: 15,
         marginLeft: 10
     }
 });

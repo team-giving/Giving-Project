@@ -41,6 +41,7 @@ export class SearchBar extends React.Component {
                         placeholder="Charity name, keyword or EIN"
                         placeholderTextColor="#808080"
                         clearButtonMode="always"
+                        returnKeyType='go'
                         onSubmitEditing={event =>
                             this.makeNewSearch(event.nativeEvent.text)
                         }

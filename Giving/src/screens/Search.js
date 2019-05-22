@@ -240,7 +240,7 @@ export default class Search extends Component {
     renderResults(favList) {
         if (this.state.showQuickButtons) {
             return (
-                <View style={styles.container}>
+                <View style={{flex: 1, width: window.width, paddingStart: 10}}>
                     <QuickSearchList
                         categories={CATEGORIES}
                         onPress={this.searchByCause}
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF"
     },
     filterFormBox: {
-        flex: 5
+        height: Platform.OS === 'ios' ? window.height / 3 * 2 : window.height / 3 * 2.1 
     },
     sectionHeader: {
         paddingTop: 2,

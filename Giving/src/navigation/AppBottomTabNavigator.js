@@ -50,6 +50,7 @@ export default AppBottomTabNavigator = createBottomTabNavigator(
         tabBarOptions: {
             activeTintColor: '#1578d0',
             inactiveTintColor: 'gray',
+            keyboardHidesTabBar: true,
         }
     }
 );
