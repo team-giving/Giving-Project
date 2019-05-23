@@ -10,13 +10,7 @@ export default class Map extends Component {
         super(props);
         this.mapRef = null;
         this.state = {
-            markers: [{
-                title: 'You',
-                coordinates: {
-                    latitude: 41.8270702,
-                    longitude: -71.3995896
-                }
-            },
+            markers: [
             {
                 title: 'Jewish Alliance of Greater Rhode Island',
                 coordinates: {

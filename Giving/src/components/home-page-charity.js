@@ -29,12 +29,12 @@ export class HomePageCharity extends React.Component {
                 style={[styles.touchable, { backgroundColor: backColor} ]}
                 onPress={this.onPressCharity}>
                 <Text style={styles.textStyle}>{charityData.charityName}</Text>
-                <View style={styles.favButton}>
+                {/* <View style={styles.favButton}>
                     <FavoriteButton
                         charityName={charityData.charityName}
                         ein={charityData.ein}
                         favoritesList={favList} />
-                </View>
+                </View> */}
             </TouchableOpacity>
         );
     }

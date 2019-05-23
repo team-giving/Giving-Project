@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from '../screens/Home';
 import DetailScreen from '../screens/Detail';
+import FavoritesScreen from '../screens/Favorites';
 
 export default HomeStack = createStackNavigator({
     Home: {
@@ -23,6 +24,9 @@ export default HomeStack = createStackNavigator({
     },
     Detail: {
         screen: DetailScreen
+    },
+    Favorites: {
+        screen: FavoritesScreen
     }
 },
 {

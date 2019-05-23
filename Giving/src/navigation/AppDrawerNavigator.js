@@ -39,7 +39,7 @@ class CustomDrawerComponent extends Component<*> {
                     "Many features will only work if you have an account",
                     [
                         { text: 'Make an account', onPress: () => this.props.navigation.navigate('AuthLoading') },
-                        { text: 'Ask me again later', onPress: () => console.log('Ask me later pressed'),  style: 'cancel'}
+                        { text: 'Ask me again later', onPress: () => console.log('Ask me later pressed'), style: 'cancel' }
                     ],
                     { cancelable: false }
                 );
@@ -64,7 +64,7 @@ class CustomDrawerComponent extends Component<*> {
                     }}
                     >
                         Hi {this.state.userName}!
-                </Text>
+                    </Text>
                 </View>
                 <View style={{ height: 50, alignItems: "center" }}>
                     <Text style={{

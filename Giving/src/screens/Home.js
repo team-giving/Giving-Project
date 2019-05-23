@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Button, FlatList, Platform } from "react-native";
+import { Alert, Text, View, StyleSheet, Button, FlatList, Platform, TouchableOpacity, Dimensions } from "react-native";
 import { HomePageList } from "../components/home-page-list.js";
 import { Fonts, SERVER_URI } from "../constants.js";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
+
+const window = Dimensions.get('window');
 
 export default class Home extends Component {
     constructor(props) {
@@ -78,6 +80,28 @@ export default class Home extends Component {
         }
     }
 
+    openFavorites = async () => {
+        this._getFavoriteList();
+        try {
+            const mongoID = await AsyncStorage.getItem("@mongoID");
+            if (mongoID !== null) {
+                // User Logged in
+                if (this.state.favoriteList.length == 0) {
+                    Alert.alert("No Favorited Charities", "You have no favorites ");
+                } else {
+                    console.log(this.state.favoriteList);
+                    this.props.navigation.navigate("Favorites", {
+                        favList: this.state.favoriteList
+                    });
+                }
+            } else {
+                Alert.alert("Missing Feature", "Feature requires Giving account");
+            }
+        } catch (error) {
+            alert(error);
+        }
+    }
+
     renderHomePageLists(favList) {
         if (this.state.listData == []) {
             return (
@@ -105,7 +129,24 @@ export default class Home extends Component {
 
     render() {
         const favList = this.state.favoriteList;
-        return <View style={styles.container}>{this.renderHomePageLists(favList)}</View>;
+        return (
+            <View style={styles.container}>
+                <View>
+                    <TouchableOpacity
+                        activeOpacity={.7}
+                        style={styles.buttonContainer} // marginBottom: 10
+                        onPress={this.openFavorites}
+                    >
+                        <Text 
+                            style={styles.buttonText}
+                        >
+                            View Favorited Charities
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                {this.renderHomePageLists(this.state.favoriteList)}
+            </View>
+        );
     }
 }
 
@@ -115,5 +156,18 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFFFFF"
+    },
+    buttonContainer: {
+        backgroundColor: '#2d2d2d',
+        paddingVertical: 12,
+        margin: 10,
+        borderRadius: 30,
+        width: window.width - 30,
+    },
+    buttonText: {
+        textAlign: 'center',
+        color: '#FFFFFF',
+        fontFamily: Fonts.Metropolis,
+        fontSize: 16
     }
 });
